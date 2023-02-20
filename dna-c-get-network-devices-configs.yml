@@ -1,0 +1,40 @@
+---
+- hosts: all
+  connection: local
+  gather_facts: false 
+  tasks:
+  - name: Get network devices
+    cisco.dnac.network_device_info:
+      dnac_host: "{{ inventory_hostname }}"
+      dnac_verify: "{{ dnac_verify }}"
+    register: network_devices
+  - name: Get device list ids  
+    ansible.builtin.set_fact:
+      device_id_list: "{{ device_id_list | default([]) }} + ['{{ item.id }}']"
+      device_ip_list: "{{ device_ip_list | default([]) }} + ['{{ item.managementIpAddress }}']"
+    with_items: "{{ network_devices.dnac_response.response }}"
+    when:
+      - network_devices.dnac_response is defined
+      - network_devices.dnac_response.response is defined
+  - name: Get Device configuration
+    cisco.dnac.network_device_config_info:
+      dnac_host: "{{ inventory_hostname }}"
+      networkDeviceId: "{{ item }}"
+    register: device_conf
+    with_items:
+      "{{ device_id_list }}"
+  - name: Display device_conf
+    debug:
+      msg: "{{ configs_loop }}"
+    vars:
+      configs_loop: |
+        {%- for index in range(device_conf.results | length) %}
+        {%- for index2 in range(network_devices.dnac_response.response | length) %}
+        {%- if device_conf.results[index].item == network_devices.dnac_response.response[index2].id %} 
+        ########################## HOSTNAME = {{ network_devices.dnac_response.response[index2].hostname }} | IP = {{ network_devices.dnac_response.response[index2].managementIpAddress }} ##########################
+        ########################## Running_config: {{ device_conf.results[index].dnac_response.response }} 
+        {% endif %}
+        {% else %}
+        {{ device_conf.results[index] }} no results
+        {% endfor %}
+        {% endfor %}
