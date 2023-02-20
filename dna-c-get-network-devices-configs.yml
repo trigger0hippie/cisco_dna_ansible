@@ -5,8 +5,7 @@
   tasks:
   - name: Get network devices
     cisco.dnac.network_device_info:
-      dnac_host: "{{ inventory_hostname }}"
-      dnac_verify: "{{ dnac_verify }}"
+      <<: *dnac_login
     register: network_devices
   - name: Get device list ids  
     ansible.builtin.set_fact:
@@ -18,7 +17,7 @@
       - network_devices.dnac_response.response is defined
   - name: Get Device configuration
     cisco.dnac.network_device_config_info:
-      dnac_host: "{{ inventory_hostname }}"
+      <<: *dnac_login
       networkDeviceId: "{{ item }}"
     register: device_conf
     with_items:
