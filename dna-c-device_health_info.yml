@@ -1,9 +1,9 @@
 # edited to work with Ansible Tower
 ---
-hosts: all
-connection: local
-gather_facts: false 
-tasks:
+- hosts: all
+  connection: local
+  gather_facts: false 
+  tasks:
   - name: Get all Device Health
     cisco.dnac.device_health_info:
       dnac_host: "{{inventory_hostname}}"
