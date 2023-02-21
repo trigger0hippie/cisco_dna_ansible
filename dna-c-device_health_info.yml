@@ -1,6 +1,8 @@
 # edited to work with Ansible Tower
 ---
-hosts: dna-c
+hosts: all
+connection: local
+gather_facts: false 
 tasks:
   - name: Get all Device Health
     cisco.dnac.device_health_info:
@@ -8,15 +10,14 @@ tasks:
       dnac_username: "{{dnac_username}}"
       dnac_password: "{{dnac_password}}"
       dnac_verify: "{{dnac_verify}}"
-      dnac_port: "{{dnac_port}}"
-      dnac_version: "{{dnac_version}}"
-      dnac_debug: "{{dnac_debug}}"
-      headers: "{{my_headers | from_json}}"
-      deviceRole: string
-      siteId: string
-      health: string
-      startTime: 0
-      endTime: 0
-      limit: 0
-      offset: 0
-    register: result
+      #deviceRole: string
+      #siteId: string
+      #health: string
+      #startTime: 0
+      #endTime: 0
+      #limit: 0
+      #offset: 0
+    register: device_health
+  - name: Display device health 
+    debug: 
+      var: device_health
