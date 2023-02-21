@@ -20,4 +20,4 @@
       - ip: "{{ item }}"
       siteId: "{{ site_id }}"
       loop:
-        "{{ device_ip}}"
+        "{{ device_ip }}"
