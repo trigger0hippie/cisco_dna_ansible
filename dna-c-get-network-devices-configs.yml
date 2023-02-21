@@ -33,7 +33,7 @@
     no_log: true
   - name: Display device configuration
     debug:
-      msg: "{{ configs_loop }}"
+      msg: "{{ configs_loop.split('\n') }}"
     vars:
       configs_loop: |
         {%- for index in range(device_conf.results | length) %}
@@ -48,8 +48,8 @@
         {% endfor %}
         {% endfor %}
 
-  - name: Save all to .txt file
-    copy:
-      content: "configs_loop"
-      dest: "/c/Users/configs.txt"
+#  - name: Save all to .txt file
+#    copy:
+#      content: "configs_loop"
+#      dest: "/c/Users/configs.txt"
       
