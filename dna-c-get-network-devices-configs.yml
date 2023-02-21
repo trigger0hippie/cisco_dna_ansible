@@ -29,7 +29,7 @@
     register: device_conf
     with_items:
       "{{ device_id_list }}"
-  - name: Display device_conf
+  - name: Display device configuration
     debug:
       msg: "{{ configs_loop }}"
     vars:
@@ -46,7 +46,7 @@
         {% endfor %}
         {% endfor %}
 
-  - name: Save to file
+  - name: Save all to .txt file
     copy:
       content: configs_loop
       dest: "/192.168.59.1/Documents/configs.txt"
