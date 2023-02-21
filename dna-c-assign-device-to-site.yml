@@ -1,0 +1,23 @@
+# edited to work with Ansible Tower
+# 
+# device_ip: 
+#    - 1.1.1.1
+#    - 2.2.2.2
+# site_id: site_id1
+# 
+---
+hosts: all
+connection: local
+gather_facts: false 
+tasks:
+  - name: Assign device to site
+    cisco.dnac.assign_device_to_site:
+      dnac_host: "{{ inventory_hostname }}"
+      dnac_username: "{{dnac_username}}"
+      dnac_password: "{{dnac_password}}"
+      dnac_verify: "{{dnac_verify}}"
+      device:
+      - ip: "{{ item }}"
+      siteId: "{{ site_id }}"
+      loop:
+        "{{ device_ip}}"
