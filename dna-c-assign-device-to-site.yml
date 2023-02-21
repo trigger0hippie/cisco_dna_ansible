@@ -6,10 +6,10 @@
 # site_id: site_id1
 # 
 ---
-hosts: all
-connection: local
-gather_facts: false 
-tasks:
+- hosts: all
+  connection: local
+  gather_facts: false 
+  tasks:
   - name: Assign device to site
     cisco.dnac.assign_device_to_site:
       dnac_host: "{{ inventory_hostname }}"
