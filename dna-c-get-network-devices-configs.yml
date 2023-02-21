@@ -48,6 +48,6 @@
 
   - name: Save all to .txt file
     copy:
-      content: configs_loop
-      dest: "/192.168.59.1/Documents/configs.txt"
+      content: "configs_loop"
+      dest: "/c/Users/configs.txt"
       
