@@ -38,9 +38,16 @@
         {%- for index2 in range(network_devices.dnac_response.response | length) %}
         {%- if device_conf.results[index].item == network_devices.dnac_response.response[index2].id %} 
         ########################## HOSTNAME = {{ network_devices.dnac_response.response[index2].hostname }} | IP = {{ network_devices.dnac_response.response[index2].managementIpAddress }} ##########################
-        ########################## Running_config: {{ device_conf.results[index].dnac_response.response }} 
+        ########################## Running_config: 
+        {{ device_conf.results[index].dnac_response.response }} 
         {% endif %}
         {% else %}
         {{ device_conf.results[index] }} no results
         {% endfor %}
         {% endfor %}
+
+  - name: Save to file
+    copy:
+      content: configs_loop
+      dest: "/192.168.59.1/Documents/configs.txt"
+      
