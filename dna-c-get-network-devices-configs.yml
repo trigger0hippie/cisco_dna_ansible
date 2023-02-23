@@ -59,7 +59,7 @@
   - name: Save all to .txt file
     copy:
       src: "{{ item | to_nice_yaml }}"
-      dest: /awx-output-folder/{{ item.0.device_hostname }}-config.txt
+      dest: /awx-output-folder/{{ item.device_hostname }}-config.txt
     with_items:
       - "{{ device_config_list_of_dicts }}"
       
