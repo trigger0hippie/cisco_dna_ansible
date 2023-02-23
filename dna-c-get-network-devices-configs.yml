@@ -33,7 +33,7 @@
     no_log: true
   - name: Generate configs list pairs
     ansible.builtin.set_fact:
-      device_config_list_of_dicts: "{{ device_config_list_of_dicts | default({}) + [{'device_hostname': item.1.hostname, 'device_ip': item.1.managementIpAddress, 'config': item.0.dnac_response.response }] }}"
+      device_config_list_of_dicts: "{{ device_config_list_of_dicts | default([]) + [{'device_hostname': item.1.hostname, 'device_ip': item.1.managementIpAddress, 'config': item.0.dnac_response.response }] }}"
     with_nested: 
       - "{{ device_conf.results }}"
       - "{{ network_devices.dnac_response.response }}"
