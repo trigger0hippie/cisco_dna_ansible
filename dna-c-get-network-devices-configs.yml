@@ -33,7 +33,7 @@
     no_log: true
   - name: Generate configs list pairs
     ansible.builtin.set_fact:
-      device_config_dict: "{{ device_config_dict | default([]) + [{'device_hostname': item.1.hostname, 'device_ip': item.1.managementIpAddress, 'config': item.0.dnac_response.response }] }}"
+      device_config_list_of_dicts: "{{ device_config_list_of_dicts | default({}) + [{'device_hostname': item.1.hostname, 'device_ip': item.1.managementIpAddress, 'config': item.0.dnac_response.response }] }}"
     with_nested: 
       - "{{ device_conf.results }}"
       - "{{ network_devices.dnac_response.response }}"
@@ -57,8 +57,9 @@
   #       {% endfor %}
     #register: configs_loop
   - name: Save all to .txt file
-    when: device_config_dict.hostname
     copy:
-      content: "{{ device_config_dict | to_nice_yaml }}"
-      dest: /awx-output-folder/{{ device_config_dict.hostname }}-config.txt
+      src: "{{ item | to_nice_yaml }}"
+      dest: /awx-output-folder/{{ item.device_hostname }}-config.txt
+    with_items:
+      - device_config_list_of_dicts
       
