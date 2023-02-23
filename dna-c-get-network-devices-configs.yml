@@ -47,9 +47,9 @@
         {{ device_conf.results[index] }} no results
         {% endfor %}
         {% endfor %}
-
+    register: configs_loop
   - name: Save all to .txt file
     copy:
-      content: "{{ configs_loop.split('\n') }}"
+      content: "{{ configs_loop }}"
       dest: /awx-output-folder/configs.txt
       
