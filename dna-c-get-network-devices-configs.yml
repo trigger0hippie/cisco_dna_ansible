@@ -31,25 +31,34 @@
     with_items:
       "{{ device_id_list }}"
     no_log: true
-  - name: Generate output device configuration
-    #debug:
-    #  msg: "{{ device_conf }}"
-    vars:
-      configs_loop: |
-        {%- for index in range(device_conf.results | length) %}
-        {%- for index2 in range(network_devices.dnac_response.response | length) %}
-        {%- if device_conf.results[index].item == network_devices.dnac_response.response[index2].id %} 
-        ########################## HOSTNAME = {{ network_devices.dnac_response.response[index2].hostname }} | IP = {{ network_devices.dnac_response.response[index2].managementIpAddress }} ##########################
-        ########################## Running_config: 
-        {{ device_conf.results[index].dnac_response.response }} 
-        {% endif %}
-        {% else %}
-        {{ device_conf.results[index] }} no results
-        {% endfor %}
-        {% endfor %}
-    register: configs_loop
-  - name: Save all to .txt file
-    copy:
-      content: "{{ configs_loop.split('\n') | to_nice_yaml }}"
-      dest: /awx-output-folder/configs.txt
+  - name: Generate configs list pairs
+    ansible.builtin.set_fact:
+      device_config_dict: "{{ device_config_dict | default([]) + [{'device_hostname': item.1.hostname, 'device_ip': item.1.managementIpAddress, 'config': item.0.dnac_response.response }] }}"
+    with_nested: 
+      - "{{ device_conf.results }}"
+      - "{{ network_devices.dnac_response.response }}"
+    when:
+      - (item.0.item == item.1.id)
+  # - name: Generate output device configuration
+  #   #debug:
+  #   #  msg: "{{ device_conf }}"
+  #   set_fact:
+  #     configs_loop: >-
+  #       {% for index in range(device_conf.results | length) %}
+  #       {% for index2 in range(network_devices.dnac_response.response | length) %}
+  #       {% if device_conf.results[index].item == network_devices.dnac_response.response[index2].id %} 
+  #       ########################## HOSTNAME = {{ network_devices.dnac_response.response[index2].hostname }} | IP = {{ network_devices.dnac_response.response[index2].managementIpAddress }} ##########################
+  #       ########################## Running_config: 
+  #       {{ device_conf.results[index].dnac_response.response }} 
+  #       {% endif %}
+  #       {% else %}
+  #       {{ device_conf.results[index] }} no results
+  #       {% endfor %}
+  #       {% endfor %}
+    #register: configs_loop
+  # - name: Save all to .txt file
+  #   when: 
+  #   copy:
+  #     content: "{{ configs_loop.split('\n') | to_nice_yaml }}"
+  #     dest: /awx-output-folder/configs.txt
       
