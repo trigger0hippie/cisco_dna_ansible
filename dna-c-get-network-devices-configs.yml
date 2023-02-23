@@ -32,8 +32,8 @@
       "{{ device_id_list }}"
     no_log: true
   - name: Generate output device configuration
-    #debug:
-    #  msg: "{{ configs_loop.split('\n') }}"
+    debug:
+      msg: "{{ device_conf }}"
     vars:
       configs_loop: |
         {%- for index in range(device_conf.results | length) %}
