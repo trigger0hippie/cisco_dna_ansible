@@ -1,4 +1,4 @@
-# edited to work with Ansible Tower
+# edited to work with Ansible Tower AWX
 ---
 - hosts: all
   connection: local
@@ -48,8 +48,8 @@
         {% endfor %}
         {% endfor %}
 
-#  - name: Save all to .txt file
-#    copy:
-#      content: "configs_loop"
-#      dest: "/c/Users/configs.txt"
+  - name: Save all to .txt file
+    copy:
+      content: "{{ configs_loop.split('\n') }}"
+      dest: /awx-output-folder/configs.txt
       
