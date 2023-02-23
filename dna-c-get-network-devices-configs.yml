@@ -50,6 +50,6 @@
     register: configs_loop
   - name: Save all to .txt file
     copy:
-      content: "{{ configs_loop }}"
+      content: "{{ configs_loop | to_nice_yaml }}"
       dest: /awx-output-folder/configs.txt
       
