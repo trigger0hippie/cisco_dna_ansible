@@ -58,7 +58,7 @@
     #register: configs_loop
   - name: Save all to .txt file
     copy:
-      src: "{{ item | to_nice_yaml }}"
+      src: "{{ item.config }}"
       dest: /awx-output-folder/{{ item.device_hostname }}-config.txt
     with_items:
       - "{{ device_config_list_of_dicts }}"
