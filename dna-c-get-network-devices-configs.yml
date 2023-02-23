@@ -31,17 +31,16 @@
     with_items:
       "{{ device_id_list }}"
     no_log: true
-  - name: Display device configuration
+  - name: Generate output device configuration
     debug:
-      msg: "{{ configs_loop.split('\n') }}"
+      msg: "{{ configs_loop }}"
     vars:
       configs_loop: |
+        {% set config_dict = {} %}
         {%- for index in range(device_conf.results | length) %}
         {%- for index2 in range(network_devices.dnac_response.response | length) %}
         {%- if device_conf.results[index].item == network_devices.dnac_response.response[index2].id %} 
-        ########################## HOSTNAME = {{ network_devices.dnac_response.response[index2].hostname }} | IP = {{ network_devices.dnac_response.response[index2].managementIpAddress }} ##########################
-        ########################## Running_config: 
-        {{ device_conf.results[index].dnac_response.response }} 
+        {% do config_dict[network_devices.dnac_response.response[index2].hostname] = device_conf.results[index].dnac_response.response %} 
         {% endif %}
         {% else %}
         {{ device_conf.results[index] }} no results
