@@ -6,7 +6,7 @@
   tasks:
   - name: Get all Device Health
     cisco.dnac.device_health_info:
-      dnac_host: "{{inventory_hostname}}"
+      dnac_host: "{{ansible_host}}"
       dnac_username: "{{dnac_username}}"
       dnac_password: "{{dnac_password}}"
       dnac_verify: "{{dnac_verify}}"
